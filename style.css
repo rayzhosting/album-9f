@@ -1,0 +1,31 @@
+
+body {
+  font-family: sans-serif;
+  background: #eef6ff;
+  margin: 0;
+  padding: 0;
+}
+header {
+  background-color: #1e88e5;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+.upload {
+  padding: 1rem;
+  text-align: center;
+}
+.upload input, .upload button {
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+.gallery img {
+  width: 100%;
+  border-radius: 10px;
+}
