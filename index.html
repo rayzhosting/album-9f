@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Album Kenangan 9F</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eaf6ff;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      background: #2196f3;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    form {
+      margin-top: 30px;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Album Kenangan<br>Kelas 9F</h1>
+
+  <form>
+    <input type="file" accept="image/*" required><br>
+    <input type="text" name="nama" placeholder="Nama" required><br>
+    <input type="date" name="tanggal" required><br>
+    <button type="submit">Upload</button>
+  </form>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7KzAhTbO2IfMcunIjxnunRFKKvzvWftU",
+      authDomain: "album-9f.firebaseapp.com",
+      projectId: "album-9f",
+      storageBucket: "album-9f.appspot.com",
+      messagingSenderId: "849462298633",
+      appId: "1:849462298633:web:862334c0c18aa73be010d8",
+      measurementId: "G-N1454S6EY5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+    const db = getFirestore(app);
+
+    document.querySelector("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const file = document.querySelector("input[type=file]").files[0];
+      const nama = document.querySelector("input[name=nama]").value;
+      const tanggal = document.querySelector("input[name=tanggal]").value;
+
+      if (!file || !nama || !tanggal) {
+        alert("Lengkapi semua data");
+        return;
+      }
+
+      const storageRef = ref(storage, `foto/${Date.now()}_${file.name}`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+
+      await addDoc(collection(db, "foto"), {
+        nama,
+        tanggal,
+        url
+      });
+
+      alert("Berhasil di-upload!");
+    });
+  </script>
+</body>
+</html>
